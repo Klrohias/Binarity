@@ -12,6 +12,8 @@
     <Copyright>https://github.com/Klrohias/Binarity/blob/main/LICENSE</Copyright>
     <RepositoryUrl>https://github.com/Klrohias/Binarity</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
