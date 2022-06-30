@@ -31,15 +31,15 @@ Console.WriteLine("Hard: " + level.Hard);
 
 class Level
 {
-    [BinartiryField("name")] public string Name { get; set; }
-    [BinartiryField("author")] public string Author { get; set; }
-    [BinartiryField("hard")] public int Hard { get; set; }
-    [BinartiryField("mobs")] public Mob[] Mobs { get; set; }
+    [BinarityField("name")] public string Name { get; set; }
+    [BinarityField("author")] public string Author { get; set; }
+    [BinarityField("hard")] public int Hard { get; set; }
+    [BinarityField("mobs")] public Mob[] Mobs { get; set; }
 }
 
 class Mob
 {
-    [BinartiryField("show_time")] public int ShowTime { get; set; }
+    [BinarityField("show_time")] public int ShowTime { get; set; }
 }
 ```
 
