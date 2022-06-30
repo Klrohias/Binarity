@@ -14,7 +14,6 @@ public class BinaritySerialization
     }
 
     public static T? Deserialize<T>(byte[] obj)
-        where T : new()
     {
         var stream = new MemoryStream();
         stream.Write(new ReadOnlySpan<byte>(obj));

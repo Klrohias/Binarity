@@ -1,6 +1,7 @@
 ﻿
 using System.Collections;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Binarity;
 
@@ -54,8 +55,9 @@ public class BinaritySerializer
         if (obj is string stringObj)
         {
             _outStream.WriteByte((byte)BinarityObjectType.String); // object type
-            _outStream.Write(CompressedInt(stringObj.Length));
-            _writer.Write(stringObj);
+            Span<byte> bytesOfString = Encoding.Default.GetBytes(stringObj);
+            _outStream.Write(CompressedInt(bytesOfString.Length));
+            _outStream.Write(bytesOfString);
         }
         else if (obj is null)
         {
@@ -154,8 +156,9 @@ public class BinaritySerializer
             foreach (var member in serializeMembers)
             {
                 var fieldName = member.GetCustomAttribute<BinartiryFieldAttribute>()!.Name;
-                _outStream.Write(BitConverter.GetBytes((ushort) fieldName.Length));
-                _writer.Write(fieldName);
+                Span<byte> bytesOfFieldName = Encoding.Default.GetBytes(fieldName);
+                _outStream.Write(BitConverter.GetBytes((ushort)bytesOfFieldName.Length));
+                _outStream.Write(bytesOfFieldName);
 
                 object? childObj = null;
                 if (member.MemberType == MemberTypes.Property)
