@@ -135,8 +135,8 @@ public class BinarityDeserializer
 
                 // load type members
                 var fields = inputType.GetMembers()
-                    .Where(x => x.GetCustomAttribute<BinartiryFieldAttribute>() != null)
-                    .ToDictionary(x => x.GetCustomAttribute<BinartiryFieldAttribute>()!.Name);
+                    .Where(x => x.GetCustomAttribute<BinarityFieldAttribute>() != null)
+                    .ToDictionary(x => x.GetCustomAttribute<BinarityFieldAttribute>()!.Name);
 
                 // read children
                 var resultsDict = new Dictionary<string, object?>();

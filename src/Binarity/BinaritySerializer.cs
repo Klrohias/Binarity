@@ -148,14 +148,14 @@ public class BinaritySerializer
             var type = obj.GetType();
             var members = type.GetMembers();
             var serializeMembers
-                = members.Where(x => x.GetCustomAttribute<BinartiryFieldAttribute>() != null);
+                = members.Where(x => x.GetCustomAttribute<BinarityFieldAttribute>() != null);
 
             _outStream.WriteByte((byte) BinarityObjectType.Object); // object type
             _outStream.Write(CompressedInt((uint)serializeMembers.Count())); // children count
             
             foreach (var member in serializeMembers)
             {
-                var fieldName = member.GetCustomAttribute<BinartiryFieldAttribute>()!.Name;
+                var fieldName = member.GetCustomAttribute<BinarityFieldAttribute>()!.Name;
                 Span<byte> bytesOfFieldName = Encoding.Default.GetBytes(fieldName);
                 _outStream.Write(BitConverter.GetBytes((ushort)bytesOfFieldName.Length));
                 _outStream.Write(bytesOfFieldName);

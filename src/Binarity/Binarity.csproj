@@ -18,9 +18,4 @@
     <Version>1.0.1</Version>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Atributes\" />
-    <Folder Include="Utils\" />
-  </ItemGroup>
-
 </Project>
