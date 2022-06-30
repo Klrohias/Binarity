@@ -123,6 +123,24 @@ public class BinaritySerializer
             blobObjStream.Read(blobBuffer);
             _outStream.Write(blobBuffer);
         }
+        else if (obj is Array arrayObj)
+        {
+            _outStream.WriteByte((byte)BinarityObjectType.Array); // object type
+            _outStream.Write(CompressedInt(arrayObj.Length));
+            foreach (var element in arrayObj)
+            {
+                Serialize(element);
+            }
+        }
+        else if (obj is IList listObj)
+        {
+            _outStream.WriteByte((byte)BinarityObjectType.Array); // object type
+            _outStream.Write(CompressedInt(listObj.Count));
+            foreach (var element in listObj)
+            {
+                Serialize(element);
+            }
+        }
         else
         {
             var type = obj.GetType();
@@ -150,7 +168,7 @@ public class BinaritySerializer
 
                 Serialize(childObj);
             }
-        }
+        } 
         _outStream.Flush();
     }
 }

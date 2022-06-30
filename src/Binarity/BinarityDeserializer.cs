@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using Binarity.Atributes;
@@ -98,6 +99,34 @@ public class BinarityDeserializer
             case BinarityObjectType.Null:
             {
                 return null;
+            }
+            case BinarityObjectType.Array:
+            {
+                
+                var length = BitConverter.ToInt32(ReadCompressedIntByte<int>());
+                Type objectsType;
+                if (inputType.IsArray)
+                {
+                    objectsType = inputType.GetElementType()!;
+                }
+                else
+                {
+                    objectsType = inputType.GetGenericArguments()[0];
+                }
+                IList objects = Activator.CreateInstance(typeof(List<>).MakeGenericType(objectsType)) as IList;
+
+                for (int i = 0; i < length; i++)
+                {
+                    objects.Add(Deserialize(objectsType));
+                }
+
+                if (inputType.IsArray)
+                {
+                    var array = Array.CreateInstance(objectsType, length);
+                    objects.CopyTo(array, 0);
+                    return array;
+                }
+                return objects;
             }
             case BinarityObjectType.Object:
             {

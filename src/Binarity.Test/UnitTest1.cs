@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Binarity;
@@ -15,6 +16,12 @@ namespace Binarity.Test
             [BinartiryField("testB")] public string Info { get; set; }
             [BinartiryField("testC")] public int Num { get; set; }
             [BinartiryField("fileA")] public Stream fileStream { get; set; }
+            [BinartiryField("arrayA")]public List<MyClassC> listOfC { get; set; }
+            [BinartiryField("arrayB")] public MyClassC[] arrayOfC { get; set; }
+        }
+        public class MyClassC
+        {
+            [BinartiryField("text")] public string Text { get; set; }
         }
         public class MyClassA
         {
@@ -32,7 +39,7 @@ namespace Binarity.Test
                     Name = "hello, world",
                     Info = "The quick brown fox jumps over the lazy dog",
                     Num = 1145141,
-                    // fileStream = file
+                    fileStream = file
                 };
             var result = BinaritySerialization.Serialize(objectMyClassA);
             file.Close();
@@ -52,7 +59,17 @@ namespace Binarity.Test
                         Name = "hello, world",
                         Info = "The quick brown fox jumps over the lazy dog",
                         Num = 1145141,
-                        fileStream = file
+                        fileStream = file,
+                        listOfC = new List<MyClassC>()
+                        {
+                            new MyClassC {Text = "test1"},
+                            new MyClassC {Text = "test2"},
+                        },
+                        arrayOfC = new MyClassC[]
+                        {
+                            new MyClassC {Text = "test3"},
+                            new MyClassC {Text = "test4"},
+                        }
                     };
                 result = BinaritySerialization.Serialize(objectMyClassA);
                 file.Close();
