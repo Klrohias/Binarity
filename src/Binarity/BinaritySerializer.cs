@@ -1,4 +1,7 @@
 ﻿
+using System.Collections;
+using System.Runtime.InteropServices;
+
 namespace Binarity;
 
 using System.Reflection;
@@ -16,11 +19,13 @@ public class BinaritySerializer
 
     public BinaritySerializer()
     {
+        
     }
 
     public BinaritySerializer(Stream stream)
     {
         _outStream = stream;
+        CompressedInt(ulong.MaxValue);
     }
 
     public void Prepare()
@@ -29,16 +34,19 @@ public class BinaritySerializer
         _writer.AutoFlush = true;
     }
 
-    public Span<byte> CompressedInt<T>(T intVal) where T : struct
+    private byte ByteRightMove(byte input, int move)
     {
-        var bytes = new Span<byte>((byte[]) typeof(BitConverter).GetMethod("GetBytes", new[] {typeof(T)})!
-            .Invoke(null, new object[] {intVal})!);
-        for (int i = bytes.Length - 1; i >= 0; i--)
+        if (move < 0)
         {
-            if (bytes[i] != 0) bytes = bytes.Slice(0, i + 2);
+            return (byte)(input << Math.Abs(move));
         }
-
-        return bytes;
+        return (byte)(input >> move);
+    }
+    private Span<byte> CompressedInt<T>(T intVal) where T : struct
+    {
+        var rawBytes = new Span<byte>((byte[])typeof(BitConverter).GetMethod("GetBytes", new[] { typeof(T) })!
+            .Invoke(null, new object[] { intVal })!);
+        return rawBytes;
     }
 
     public void Serialize<T>(T? obj)
@@ -123,12 +131,12 @@ public class BinaritySerializer
                 = members.Where(x => x.GetCustomAttribute<BinartiryFieldAttribute>() != null);
 
             _outStream.WriteByte((byte) BinarityObjectType.Object); // object type
-            _outStream.Write(CompressedInt(serializeMembers.Count())); // children count
+            _outStream.Write(CompressedInt((uint)serializeMembers.Count())); // children count
             
             foreach (var member in serializeMembers)
             {
                 var fieldName = member.GetCustomAttribute<BinartiryFieldAttribute>()!.Name;
-                _outStream.Write(BitConverter.GetBytes((short) fieldName.Length));
+                _outStream.Write(BitConverter.GetBytes((ushort) fieldName.Length));
                 _writer.Write(fieldName);
 
                 object? childObj = null;

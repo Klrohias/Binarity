@@ -13,13 +13,15 @@ public class BinaritySerialization
         return stream.ToArray();
     }
 
-    public static T Deserialize<T>(byte[] obj)
+    public static T? Deserialize<T>(byte[] obj)
         where T : new()
     {
         var stream = new MemoryStream();
         stream.Write(new ReadOnlySpan<byte>(obj));
-        var deserializer = new BinarityDeserializer(stream);
+        stream.Seek(0, SeekOrigin.Begin);
 
-        return deserializer.Deserialize<T>();
+        var deserializer = new BinarityDeserializer(stream);
+        var finalObj = deserializer.Deserialize(typeof(T));
+        return (T?)finalObj;
     }
 }
