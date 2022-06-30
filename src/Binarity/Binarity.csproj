@@ -4,6 +4,14 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Company>Klrohias</Company>
+    <Description>Serialize an object as binary data in .NET.
+
+</Description>
+    <PackageProjectUrl>https://github.com/Klrohias/Binarity</PackageProjectUrl>
+    <Copyright>https://github.com/Klrohias/Binarity/blob/main/LICENSE</Copyright>
+    <RepositoryUrl>https://github.com/Klrohias/Binarity</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
